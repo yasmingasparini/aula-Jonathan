@@ -1,49 +1,109 @@
-// console.log(taboada(5))
+// Passo 3 — Estrutura de dados
+let participantes = [];
 
-// function taboada (a){
-//     let arrayTaboada =[]
-//     for(let i=0; i<=10; i++){
-//         arrayTaboada.push(i*a)
-//     }
-//     return arrayTaboada
-// }
+// Elementos
+const inputNome = document.getElementById("inputNome");
+const btnAdicionar = document.getElementById("btnAdicionar");
+const btnSortear = document.getElementById("btnSortear");
+const listaParticipantes = document.getElementById("listaParticipantes");
+const resultadoDiv = document.getElementById("resultado");
 
+// Evento botão adicionar
+btnAdicionar.addEventListener("click", adicionarParticipante);
+btnSortear.addEventListener("click", realizarSorteio);
 
-// console.log(somar(2, 3))
-// console.log(subtrair(2, 3))
-// console.log(multiplicacao(2, 3))
-// console.log(divisao(2, 3))
-// function somar(a, b){
-//     return a + b
-// }
-// function subtrair(a, b){
-//     return a - b
-// }
-// function multiplicacao(a ,b){
-//     return a * b
-// }
-// function divisao(a, b){
-//     return (a / b).toFixed(2)
-// }
+// Passo 4
+function adicionarParticipante() {
+    const nome = inputNome.value.trim();
 
+    if (nome === "") {
+        alert("Digite um nome válido!");
+        return;
+    }
 
-// console.log(calcular("/", 2, 3))
-// function calcular(operador, a, b){
-//     if(operador=="+"){
-//         return a + b
-//     } else if (operador == "-"){
-//         return a - b
-//     } else if (operador == "*"){
-//         return a * b
-//     } else if (operador == "/"){
-//         return a / b
-//     }
-// }
+    const novoParticipante = {
+        nome: nome,
+        sorteado: null
+    };
 
+    participantes.push(novoParticipante);
 
-function saudacao(nome){
-    nome = prompt ("Digite seu nome")
-    alert ("Olá" + nome)
-} 
+    inputNome.value = "";
 
-saudacao()
+    renderizarLista();
+}
+
+function renderizarLista() {
+    listaParticipantes.innerHTML = "";
+
+    for (const participante of participantes) {
+        const li = document.createElement("li");
+        li.textContent = participante.nome;
+        listaParticipantes.appendChild(li);
+    }
+}
+
+// Passo 5
+function realizarSorteio() {
+
+    if (participantes.length < 3) {
+        alert("É necessário pelo menos 3 participantes!");
+        return;
+    }
+
+    let nomesSorteio = participantes.map(p => p.nome);
+    let valido = false;
+
+    while (!valido) {
+
+        nomesSorteio.sort(() => Math.random() - 0.5);
+
+        valido = true;
+
+        for (let i = 0; i < participantes.length; i++) {
+            if (participantes[i].nome === nomesSorteio[i]) {
+                valido = false;
+                break;
+            }
+        }
+    }
+
+    for (let i = 0; i < participantes.length; i++) {
+        participantes[i].sorteado = nomesSorteio[i];
+    }
+
+    montarCartoes();
+}
+
+// Passo 6
+function montarCartoes() {
+
+    resultadoDiv.innerHTML = "";
+
+    for (const participante of participantes) {
+
+        const card = document.createElement("div");
+        card.classList.add("card");
+
+        const cardInner = document.createElement("div");
+        cardInner.classList.add("card-inner");
+
+        const front = document.createElement("div");
+        front.classList.add("front");
+        front.innerHTML = `<strong>${participante.nome}</strong><br>Clique para revelar`;
+
+        const back = document.createElement("div");
+        back.classList.add("back");
+        back.innerHTML = `Você tirou:<br><br><strong>${participante.sorteado}</strong>`;
+
+        cardInner.appendChild(front);
+        cardInner.appendChild(back);
+        card.appendChild(cardInner);
+
+        card.addEventListener("click", function() {
+            card.classList.toggle("flip");
+        });
+
+        resultadoDiv.appendChild(card);
+    }
+}

@@ -1,20 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Amigo Secreto</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <script >
 
-       let nome = prompt ("Digite seu nome")
-function saudacao(nome){
-    alert ("Olá " + nome)
-} 
+    <h1>Sorteio de Amigo Secreto</h1>
 
-saudacao(nome)
+    <div class="entrada">
+        <input type="text" id="inputNome" placeholder="Digite o nome">
+        <button id="btnAdicionar">Adicionar</button>
+    </div>
 
-    </script>
+    <ul id="listaParticipantes"></ul>
+
+    <button id="btnSortear">Realizar Sorteio</button>
+
+    <div id="resultado"></div>
+
+    <script src="script.js"></script>
 </body>
 </html>
